@@ -1,0 +1,33 @@
+{
+  "name": "challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "rm -rf dist && mkdir dist && cp ./framework/mock-server/mockServiceWorker.js dist/ && esbuild ./framework/server/index.js --bundle --minify --platform=node --outfile=dist/server.js",
+    "build:client": "esbuild ./framework/client/index.js --bundle --minify --platform=browser --outfile=dist/client.js",
+    "start": "npm run build && node dist/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.21.3"
+  },
+  "dependencies": {
+    "fastify": "^4.27.0",
+    "msw": "^2.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "valibot": "^0.30.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "mockServer"
+    ]
+  }
+}
