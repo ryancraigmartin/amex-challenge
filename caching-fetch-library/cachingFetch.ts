@@ -1,4 +1,4 @@
-import { CacheEntry, UseCachingFetch } from "./types";
+import { CacheEntry, UseCachingFetch } from './types';
 
 /**
  * 1. Implement a caching fetch hook. The hook should return an object with the following properties:
@@ -21,7 +21,7 @@ import { CacheEntry, UseCachingFetch } from "./types";
 
 const cache = new Map<string, CacheEntry>();
 
-export const useCachingFetch: UseCachingFetch = (url) => {
+export const useCachingFetch: UseCachingFetch = url => {
   return {
     data: null,
     isLoading: false,
@@ -46,9 +46,17 @@ export const useCachingFetch: UseCachingFetch = (url) => {
  *
  */
 export const preloadCachingFetch = async (url: string): Promise<void> => {
-  throw new Error(
-    'preloadCachingFetch has not been implemented, please read the instructions in DevTask.md',
-  );
+  const response = await fetch(url);
+  if (response.ok) {
+    const data = await response.json();
+    cache.set(url, {
+      data,
+      error: null,
+      status: 'success',
+    });
+  } else {
+    throw new Error(`preloadCachingFetch request failed: ${response.status}`);
+  }
 };
 
 /**
@@ -71,4 +79,6 @@ export const serializeCache = (): string => '';
 
 export const initializeCache = (serializedCache: string): void => {};
 
-export const wipeCache = (): void => {};
+export const wipeCache = (): void => {
+  cache.clear();
+};
