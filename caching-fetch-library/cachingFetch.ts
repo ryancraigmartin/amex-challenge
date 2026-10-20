@@ -1,4 +1,4 @@
-import { UseCachingFetch } from "./types";
+import { CacheEntry, UseCachingFetch } from "./types";
 
 /**
  * 1. Implement a caching fetch hook. The hook should return an object with the following properties:
@@ -18,6 +18,9 @@ import { UseCachingFetch } from "./types";
  * 4. This file passes a type-check.
  *
  */
+
+const cache = new Map<string, CacheEntry>();
+
 export const useCachingFetch: UseCachingFetch = (url) => {
   return {
     data: null,
