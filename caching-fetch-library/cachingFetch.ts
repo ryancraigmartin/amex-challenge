@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CacheEntry, UseCachingFetch } from './types';
+import { CacheEntry, SerializedEntry, UseCachingFetch } from './types';
 
 /**
  * 1. Implement a caching fetch hook. The hook should return an object with the following properties:
@@ -83,9 +83,33 @@ export const preloadCachingFetch = async (url: string): Promise<void> => {
  * 4. This file passes a type-check.
  *
  */
-export const serializeCache = (): string => '';
+export const serializeCache = (): string => {
+  const payload: Record<string, SerializedEntry> = {};
+  cache.forEach((entry, url) => {
+    payload[url] = {
+      data: entry.data,
+      errorMessage: entry.error ? entry.error.message : null,
+      status: entry.status === 'loading' || entry.status === 'idle' ? 'idle' : entry.status,
+    };
+  });
+  const encodedPayload = encodeURIComponent(JSON.stringify(payload));
+  return encodedPayload;
+};
 
-export const initializeCache = (serializedCache: string): void => {};
+export const initializeCache = (serializedCache: string): void => {
+  if (!serializedCache) return;
+  const payload = JSON.parse(decodeURIComponent(serializedCache)) as Record<
+    string,
+    SerializedEntry
+  >;
+  Object.entries(payload).forEach(([url, serialized]) => {
+    cache.set(url, {
+      data: serialized.data,
+      error: serialized.errorMessage ? new Error(serialized.errorMessage) : null,
+      status: serialized.status === 'loading' ? 'idle' : serialized.status,
+    });
+  });
+};
 
 export const wipeCache = (): void => {
   cache.clear();

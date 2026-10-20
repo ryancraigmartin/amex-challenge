@@ -6,6 +6,11 @@ export type CacheEntry = {
   promise?: Promise<void>;
 };
 
+export type SerializedEntry = {
+  data: unknown | null;
+  errorMessage: string | null;
+  status: CacheStatus;
+};
 
 export type UseCachingFetch = (url: string) => {
   isLoading: boolean;
