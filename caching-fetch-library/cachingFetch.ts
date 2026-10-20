@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { CacheEntry, UseCachingFetch } from './types';
 
 /**
@@ -18,16 +19,23 @@ import { CacheEntry, UseCachingFetch } from './types';
  * 4. This file passes a type-check.
  *
  */
-
 const cache = new Map<string, CacheEntry>();
 
 export const useCachingFetch: UseCachingFetch = url => {
+  const [, forceRender] = useState(0);
+  const entry = cache.get(url);
+
+  useEffect(() => {
+    if (entry) return;
+    preloadCachingFetch(url)
+      .catch(() => {})
+      .then(() => forceRender(counter => counter + 1));
+  }, [url]);
+
   return {
-    data: null,
-    isLoading: false,
-    error: new Error(
-      'UseCachingFetch has not been implemented, please read the instructions in DevTask.md',
-    ),
+    data: entry?.data ?? null,
+    isLoading: !entry,
+    error: entry?.error ?? null,
   };
 };
 
