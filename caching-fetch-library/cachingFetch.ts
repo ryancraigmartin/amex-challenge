@@ -1,13 +1,4 @@
-// You may edit this file, add new files to support this file,
-// and/or add new dependencies to the project as you see fit.
-// However, you must not change the surface API presented from this file,
-// and you should not need to change any other files in the project to complete the challenge
-
-type UseCachingFetch = (url: string) => {
-  isLoading: boolean;
-  data: unknown;
-  error: Error | null;
-};
+import { UseCachingFetch } from "./types";
 
 /**
  * 1. Implement a caching fetch hook. The hook should return an object with the following properties:
