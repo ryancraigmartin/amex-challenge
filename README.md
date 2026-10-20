@@ -11,6 +11,6 @@ Things I would add with more time:
 Known issues:
 
 1. No request deduplication at the moment.
-2. Better error handling and monitoring around cache misses and network failures.
+2. Need better error handling and monitoring around cache misses and network failures.
 3. Cache expiration is not implemented.
 
